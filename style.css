@@ -19,6 +19,11 @@ STYLE.CSS - El Secreto del Diseño Premium
     box-sizing: border-box;
 }
 
+html {
+    /* Habilita el scroll suave en toda la página */
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-main);
     background-color: #333; /* Fondo para ver el marco del teléfono */
@@ -63,18 +68,23 @@ body {
     border-radius: 8px;
 }
 
+/* Barra de navegación de categorías STICKY */
 .category-nav {
     display: flex;
     gap: 1.5rem;
-    padding: 0 1.75rem 1.5rem 1.75rem;
+    padding: 1rem 1.75rem;
     border-bottom: 1px solid var(--color-border);
-    overflow-x: auto; /* Permite el scroll horizontal */
-    -ms-overflow-style: none;  /* IE y Edge */
-    scrollbar-width: none;  /* Firefox */
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
     flex-shrink: 0;
+    background-color: var(--color-bg); /* Fondo para que no se transparente al hacer scroll */
+    position: sticky; /* La magia sucede aquí */
+    top: 0;
+    z-index: 10;
 }
 .category-nav::-webkit-scrollbar {
-    display: none; /* Oculta la barra de scroll en Chrome/Safari */
+    display: none;
 }
 .category-nav a {
     text-decoration: none;
@@ -83,22 +93,32 @@ body {
     font-size: 0.9rem;
     white-space: nowrap;
     transition: color 0.2s ease;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid transparent;
 }
 .category-nav a.active,
 .category-nav a:hover {
     color: var(--color-text-primary);
+    border-bottom-color: var(--color-accent);
 }
 
 .menu-content {
-    padding: 1.5rem 1.75rem;
-    overflow-y: auto; /* Permite el scroll vertical del contenido */
+    overflow-y: auto;
     flex-grow: 1;
+    /* Añadimos padding para que el contenido no quede pegado a los bordes */
+    padding: 0 1.75rem;
 }
 
-.main-title {
+/* Título de cada categoría de platos */
+.category-section {
+    padding-top: 1.5rem; /* Espacio para que el título no quede pegado a la nav sticky */
+}
+
+.category-title {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
+    text-transform: uppercase;
 }
 
 /* La tarjeta del plato: el corazón del diseño */
@@ -145,7 +165,6 @@ body {
     font-weight: 800;
 }
 
-/* El botón de check: la micro-interacción clave */
 .check-button {
     width: 36px;
     height: 36px;
@@ -164,7 +183,7 @@ body {
     height: 20px;
     stroke: var(--color-accent);
     stroke-width: 2.5;
-    opacity: 0; /* Oculto por defecto */
+    opacity: 0;
     transform: scale(0.5);
     transition: all 0.3s ease;
 }
@@ -178,7 +197,6 @@ body {
     transform: scale(1);
 }
 
-/* Botón flotante de Pedir */
 .order-footer {
     position: absolute;
     bottom: 0;
