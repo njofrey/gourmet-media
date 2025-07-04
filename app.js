@@ -1,76 +1,83 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const menuContainer = document.querySelector('.menu-container');
-    const orderFooter = document.getElementById('order-footer');
-    const itemCountSpan = document.getElementById('item-count');
-    let selectedItems = new Set(); // Usamos un Set para evitar duplicados
 
-    // Datos del menú (esto vendría de un menu.json en un caso real)
-    const menuData = [
-        { id: 1, nombre: "STEAK DE LOMO", descripcion: "Corte premium de lomo de res...", precio: "22.900", imagen: "url_de_la_imagen_del_steak.jpg" },
-        { id: 2, nombre: "PAPAS RÚSTICAS", descripcion: "Papas cortadas en gajos, sazonadas...", precio: "6.900", imagen: "url_de_la_imagen_de_papas.jpg" },
-        { id: 3, nombre: "ENSALADA MIXTA", descripcion: "Mezcla fresca de lechugas, tomate...", precio: "4.900", imagen: "url_de_la_imagen_de_ensalada.jpg" }
+    // NUESTRA "LISTA DE COMPRAS" (LOS DATOS DEL MENÚ)
+    // Usamos imágenes reales de alta calidad para que se vea bien al instante.
+    const menuItems = [
+        {
+            id: 1,
+            name: "STEAK DE LOMO",
+            description: "Corte premium de lomo de res, jugoso, tierno y sellado a la perfección.",
+            price: "22.900",
+            image: "https://images.pexels.com/photos/361184/pexels-photo-361184.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        },
+        {
+            id: 2,
+            name: "PAPAS RÚSTICAS",
+            description: "Papas cortadas en gajos, sazonadas con especias y hierbas horneadas.",
+            price: "6.900",
+            image: "https://images.pexels.com/photos/1893555/pexels-photo-1893555.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        },
+        {
+            id: 3,
+            name: "ENSALADA MIXTA",
+            description: "Mezcla fresca de lechugas, tomate, pepino y zanahoria con aderezo a gusto.",
+            price: "4.900",
+            image: "https://images.pexels.com/photos/257816/pexels-photo-257816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        },
+        {
+            id: 4,
+            name: "TARTA DE CHOCOLATE",
+            description: "Base crujiente y corazón cremoso de praliné y avellanas.",
+            price: "5.500",
+            image: "https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+        }
     ];
 
-    function renderMenu() {
-        menuContainer.innerHTML = '';
-        menuData.forEach(plato => {
-            const isSelected = selectedItems.has(plato.id);
-            const buttonClass = isSelected ? 'add-button selected' : 'add-button';
-            const buttonIcon = isSelected ? '✓' : '+';
+    const menuContainer = document.getElementById('menu-container');
+    const orderFooter = document.getElementById('order-footer');
+    const itemCountSpan = document.getElementById('item-count');
+    const selectedItems = new Set();
 
-            const platoHTML = `
-                <article class="plato-card" data-id="${plato.id}">
-                    <img src="https://via.placeholder.com/110" alt="${plato.nombre}" class="plato-imagen">
-                    <div class="plato-info">
-                        <div>
-                            <h2>${plato.nombre}</h2>
-                            <p class="descripcion">${plato.descripcion}</p>
-                        </div>
-                        <p class="precio">$${plato.precio}</p>
-                    </div>
-                    <button class="${buttonClass}">${buttonIcon}</button>
-                </article>
-            `;
-            menuContainer.innerHTML += platoHTML;
-        });
-        addEventListenersToButtons();
-    }
+    // El "Chef" lee la lista de compras y empieza a "emplatar"
+    menuItems.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'plato-card';
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="plato-imagen">
+            <div class="plato-info">
+                <h2>${item.name}</h2>
+                <p class="descripcion">${item.description}</p>
+                <p class="precio">$${item.price}</p>
+            </div>
+            <button class="add-button" data-id="${item.id}">+</button>
+        `;
+        menuContainer.appendChild(card);
+    });
 
-    function addEventListenersToButtons() {
-        document.querySelectorAll('.plato-card').forEach(card => {
-            card.querySelector('.add-button').addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el click se propague a la card
-                const platoId = parseInt(card.dataset.id);
-                toggleSelection(platoId);
-            });
-        });
-    }
+    // El "Chef" está atento a cuando tocas un botón "+"
+    menuContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('add-button')) {
+            const button = event.target;
+            const itemId = button.dataset.id;
 
-    function toggleSelection(platoId) {
-        if (selectedItems.has(platoId)) {
-            selectedItems.delete(platoId);
-        } else {
-            selectedItems.add(platoId);
+            // Cambiamos el estado: seleccionado o no seleccionado
+            if (selectedItems.has(itemId)) {
+                selectedItems.delete(itemId);
+                button.classList.remove('selected');
+                button.textContent = '+';
+            } else {
+                selectedItems.add(itemId);
+                button.classList.add('selected');
+                button.textContent = '−'; // Cambiamos a un signo de menos
+            }
+
+            // Actualizamos el contador y mostramos/ocultamos el botón de pedir
+            itemCountSpan.textContent = selectedItems.size;
+            if (selectedItems.size > 0) {
+                orderFooter.classList.add('visible');
+            } else {
+                orderFooter.classList.remove('visible');
+            }
         }
-        updateUI();
-    }
-    
-    function updateUI() {
-        // Actualizar contador
-        const count = selectedItems.size;
-        itemCountSpan.textContent = count;
-        
-        // Actualizar visibilidad del footer
-        if (count > 0) {
-            orderFooter.classList.add('visible');
-        } else {
-            orderFooter.classList.remove('visible');
-        }
-        
-        // Volver a dibujar el menú para reflejar los botones seleccionados
-        renderMenu();
-    }
-    
-    // Carga inicial
-    renderMenu();
+    });
 });
