@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Gourmet</title>
+    <title>Gourmedia | Menú</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-    <header>
-        <h1>Nuestro Menú</h1>
+    <header class="main-header">
+        <div class="logo">gourmedia</div>
+        <nav class="top-nav">
+            </nav>
     </header>
 
+    <nav class="category-nav">
+        <a href="#" class="active">Todos</a>
+        <a href="#">Ensaladas y Sopas</a>
+        <a href="#">Sándwich, Hamburguesas</a>
+        <a href="#">Postres</a>
+    </nav>
+
     <main class="menu-container">
-        <div class="plato" id="plato-1">
-            <img src="https://via.placeholder.com/300" alt="Foto del Salmón a la Naranja">
-            <h2>Salmón a la Naranja</h2>
-            <p class="descripcion">Fino filete de salmón sellado a la perfección, bañado en una delicada salsa de naranjas frescas y un toque de eneldo.</p>
-            <p class="precio">$18.990</p>
-            <button>Ver detalles</button>
-        </div>
         </main>
+    
+    <footer class="order-footer" id="order-footer">
+        <button class="order-button">Pedir • <span id="item-count">0</span></button>
+    </footer>
 
     <script src="app.js"></script>
 </body>
